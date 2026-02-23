@@ -1,0 +1,61 @@
+
+YearMonth = 
+FORMAT('public dim_date'[full_date], "YYYY-MM")
+
+*********************************************************************
+YearMonthSort = 
+YEAR('public dim_date'[full_date]) * 100
++ MONTH('public dim_date'[full_date])
+
+*********************************************************************
+Total Stock = 
+SUM('public fact_inventory'[stock_quantity])
+
+*********************************************************************
+MoM Growth % = 
+VAR CurrentRevenue = [Total Revenue]
+VAR PreviousRevenue =
+    CALCULATE(
+        [Total Revenue],
+        PREVIOUSMONTH('public dim_date'[full_date])
+    )
+RETURN
+DIVIDE(CurrentRevenue - PreviousRevenue, PreviousRevenue) * 100
+
+*********************************************************************
+
+Profit Margin % = 
+DIVIDE([Total Profit], [Total Revenue]) * 100
+
+*********************************************************************
+Total Profit = 
+SUMX(
+    'public fact_sales',
+    'public fact_sales'[revenue] -
+    (
+        'public fact_sales'[quantity] *
+        RELATED('public dim_products'[cost_price])
+    )
+)
+
+*********************************************************************
+Total Quantity Sold = 
+SUM('public fact_sales'[quantity])
+
+*********************************************************************
+
+Total Revenue = SUM('public fact_sales'[revenue])
+
+*********************************************************************
+
+YoY Growth % = 
+VAR CurrentRevenue = [Total Revenue]
+VAR PreviousRevenue =
+    CALCULATE(
+        [Total Revenue],
+        SAMEPERIODLASTYEAR('public dim_date'[full_date])
+    )
+RETURN
+DIVIDE(CurrentRevenue - PreviousRevenue, PreviousRevenue) * 100
+
+**********************************************************************

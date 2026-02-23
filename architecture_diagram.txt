@@ -1,0 +1,18 @@
+[ CSV Data Sources ]
+     |
+     v
+[ Python ETL Layer ]
+(generate_data.py
+ etl_pipeline.py)
+     |
+     v
+[ PostgreSQL Data Warehouse ]
+(Dim Tables + Fact Tables)
+     |
+     |----------------------|
+     |                      |
+     v                      v
+[ Power BI Dashboard ]   [ Python Analytics Layer ]
+(KPIs, Trends, MoM)      (Rolling Avg, Volatility,
+                          Anomaly Detection,
+                          KMeans Segmentation)
